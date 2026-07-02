@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOVA | 宇宙を、ゲームのように学ぶ。</title>
+  <meta name="description" content="NOVAは、クイズ、銀河マップ、図鑑、ミッションを通して宇宙をゲーム感覚で学べる学習アプリです。">
+  <meta name="keywords" content="NOVA, 宇宙, Space, 学習アプリ, Quiz, Galaxy, Astronomy, Space Learning">
+  <meta name="author" content="NOVA">
+  <meta name="theme-color" content="#01040b">
+  <meta property="og:title" content="NOVA | 宇宙を、ゲームのように学ぶ。">
+  <meta property="og:description" content="NOVAは、クイズ、銀河マップ、図鑑、ミッションを通して宇宙をゲーム感覚で学べる学習アプリです。">
+  <meta property="og:image" content="画像/NOVA.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="NOVA.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="NOVA | 宇宙を、ゲームのように学ぶ。">
+  <meta name="twitter:description" content="NOVAは、クイズ、銀河マップ、図鑑、ミッションを通して宇宙をゲーム感覚で学べる学習アプリです。">
+  <meta name="twitter:image" content="画像/NOVA.png">
+  <link rel="icon" type="image/png" href="画像/NOVA.png">
+  <link rel="apple-touch-icon" href="画像/NOVA.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="NOVA.css">
+</head>
+<body>
+  <canvas class="space-canvas" id="spaceCanvas" aria-hidden="true"></canvas>
+  <div class="rocket-progress" aria-hidden="true">
+    <span class="rocket-track"></span>
+    <span class="rocket-spark spark-one"></span>
+    <span class="rocket-spark spark-two"></span>
+    <span class="rocket-spark spark-three"></span>
+    <span class="rocket">
+      <span class="rocket-window"></span>
+      <span class="rocket-trail"></span>
+    </span>
+  </div>
+
+  <header class="site-header" data-animate>
+    <a class="brand" href="#hero" aria-label="NOVA home">
+      <img class="brand-logo" src="画像/NOVA.png" alt="" aria-hidden="true">
+      <span>NOVA</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="#what">What is NOVA?</a>
+      <a href="#why">Why</a>
+      <a href="#vision">Vision</a>
+      <a href="#journey">Journey</a>
+      <a href="#features">Features</a>
+    </nav>
+
+    <a class="nav-cta disabled-cta" href="#download" aria-disabled="true">近日公開</a>
+  </header>
+
+  <main>
+    <section class="launch-intro" id="launch" aria-label="NOVA launch intro">
+      <div class="launch-stars" aria-hidden="true"></div>
+      <div class="launch-copy">
+        <p>NOVA</p>
+        <span>宇宙を、ゲームのように学ぶ。</span>
+      </div>
+      <div class="launch-pad" aria-hidden="true">
+        <span class="launch-smoke smoke-one"></span>
+        <span class="launch-smoke smoke-two"></span>
+        <span class="launch-smoke smoke-three"></span>
+        <span class="launch-smoke smoke-four"></span>
+        <span class="launch-rocket">
+          <span class="launch-rocket-window"></span>
+          <span class="launch-flame"></span>
+        </span>
+      </div>
+      <div class="launch-scroll-cue">
+        <span>Scroll to Launch</span>
+        <span class="launch-arrow" aria-hidden="true"></span>
+      </div>
+    </section>
+
+    <section class="hero section" id="hero">
+      <div class="hero-copy" data-animate>
+        <p class="eyebrow">Space Learning</p>
+        <div class="hero-logo-lockup" aria-hidden="true">
+          <img class="hero-logo" src="画像/NOVA.png" alt="">
+        </div>
+        <h1>NOVA</h1>
+        <p class="hero-lead">宇宙を、ゲームのように学ぶ。</p>
+        <p class="hero-subcopy">クイズ、銀河マップ、図鑑、ミッションで、宇宙の知識を楽しく積み重ねる学習アプリ。</p>
+        <div class="hero-actions">
+          <a class="button primary disabled-cta" href="#download" aria-disabled="true">近日公開</a>
+        </div>
+        <p class="cta-subtext">App Storeで公開予定</p>
+      </div>
+
+      <div class="hero-visual" data-animate>
+        <span class="planet-drift planet-drift-one" aria-hidden="true"></span>
+        <span class="planet-drift planet-drift-two" aria-hidden="true"></span>
+        <div class="halo halo-one"></div>
+        <div class="halo halo-two"></div>
+        <figure class="iphone-mockup hero-phone float-slow">
+          <img src="画像/LaunchView.png" alt="NOVA launch screen on iPhone">
+        </figure>
+      </div>
+    </section>
+
+    <section class="section what-section" id="what">
+      <div class="what-panel" data-animate>
+        <div>
+          <p class="eyebrow">What is NOVA?</p>
+          <h2>宇宙の知識を、楽しく積み重ねる。</h2>
+        </div>
+        <p>NOVAは、クイズ、銀河マップ、図鑑、ミッションを通して、宇宙の知識を楽しく積み重ねられる学習アプリです。</p>
+      </div>
+    </section>
+
+    <section class="section why-section" id="why">
+      <div class="story-panel" data-animate>
+        <p class="eyebrow">Why NOVA</p>
+        <h2>最初の一歩を、もっと美しく。</h2>
+        <div class="story-lines">
+          <p>宇宙に興味はある。</p>
+          <p>でも、何から学べばいいのか分からない。</p>
+          <p>NOVAは、その最初の一歩になるために生まれました。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section vision-section" id="vision">
+      <div class="vision-panel" data-animate>
+        <p class="eyebrow">Our Vision</p>
+        <h2>宇宙を学ぶことは、未来を学ぶこと。</h2>
+        <p>NOVAは、知識を増やすためだけのアプリではありません。宇宙への好奇心を育み、学び続ける楽しさを届けることを目指しています。</p>
+        <p>私たちは、誰もが宇宙をもっと身近に感じられる未来をつくります。</p>
+      </div>
+    </section>
+
+    <section class="section numbers-section" id="numbers">
+      <div class="section-heading centered" data-animate>
+        <p class="eyebrow">NOVA in Numbers</p>
+        <h2>学びが進むほど、宇宙が広がる。</h2>
+        <p>クイズ、カテゴリ、XP、マップ、ミッション、図鑑。毎日の小さな進歩を、ひとつの探索体験へ。</p>
+      </div>
+      <div class="stats-grid">
+        <article class="stat-card" data-animate>
+          <strong><span data-counter data-target="1000">0</span>+</strong>
+          <span>Questions</span>
+        </article>
+        <article class="stat-card" data-animate>
+          <strong><span data-counter data-target="30">0</span></strong>
+          <span>Categories</span>
+        </article>
+        <article class="stat-card" data-animate>
+          <strong>XP</strong>
+          <span>System</span>
+        </article>
+        <article class="stat-card" data-animate>
+          <strong>Galaxy</strong>
+          <span>Map</span>
+        </article>
+        <article class="stat-card" data-animate>
+          <strong>Daily</strong>
+          <span>Missions</span>
+        </article>
+        <article class="stat-card" data-animate>
+          <strong>Archive</strong>
+          <span>Collection</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="section journey-section" id="journey">
+      <div class="section-heading" data-animate>
+        <p class="eyebrow">Learning Journey</p>
+        <h2>ホームから、銀河の奥へ。</h2>
+        <p>学ぶ、進む、集める、振り返る。NOVAの体験は、ひとつの宇宙探索としてつながっています。</p>
+      </div>
+      <div class="journey-orbit" data-animate aria-label="NOVA learning journey">
+        <span>Home</span>
+        <i aria-hidden="true"></i>
+        <span>Quiz</span>
+        <i aria-hidden="true"></i>
+        <span>Galaxy</span>
+        <i aria-hidden="true"></i>
+        <span>Archive</span>
+        <i aria-hidden="true"></i>
+        <span>Stats</span>
+        <i aria-hidden="true"></i>
+        <span>Mission</span>
+        <i aria-hidden="true"></i>
+        <span>Focus</span>
+      </div>
+    </section>
+
+    <section class="section gallery-section" id="gallery">
+      <div class="section-heading" data-animate>
+        <p class="eyebrow">Gallery</p>
+        <h2>NOVAの世界を、画面から。</h2>
+      </div>
+      <div class="gallery-strip">
+        <figure class="iphone-mockup gallery-phone float-soft" data-animate data-lightbox data-image="画像/IntroView.png" data-title="Intro" data-subtitle="はじめた瞬間、広がる。" data-description="NOVAの世界観と学習の流れを、シンプルに体験できます。"><img src="画像/IntroView.png" alt="NOVA intro screen"></figure>
+        <figure class="iphone-mockup gallery-phone float-soft delay-one" data-animate data-lightbox data-image="画像/LaunchView.png" data-title="Launch" data-subtitle="宇宙への入口。" data-description="NOVAを開いた瞬間から、宇宙を学ぶ体験が始まります。"><img src="画像/LaunchView.png" alt="NOVA launch screen"></figure>
+        <figure class="iphone-mockup gallery-phone float-soft delay-two" data-animate data-lightbox data-image="画像/HomeView.png" data-title="Home" data-subtitle="今日の宇宙へ、すぐに。" data-description="進捗、ミッション、次のクイズを一画面で確認できます。"><img src="画像/HomeView.png" alt="NOVA home screen"></figure>
+        <figure class="iphone-mockup gallery-phone float-soft delay-three" data-animate data-lightbox data-image="画像/QuizView.png" data-title="Space Quiz" data-subtitle="一問ずつ、宇宙が近づく。" data-description="宇宙の知識を、短いクイズで少しずつ深められます。"><img src="画像/QuizView.png" alt="NOVA quiz screen"></figure>
+        <figure class="iphone-mockup gallery-phone float-soft" data-animate data-lightbox data-image="画像/GalaxyView.png" data-title="Galaxy Map" data-subtitle="知識が増えるほど、銀河が広がる。" data-description="学習の進み具合に合わせて銀河が広がります。"><img src="画像/GalaxyView.png" alt="NOVA galaxy screen"></figure>
+        <figure class="iphone-mockup gallery-phone float-soft delay-one" data-animate data-lightbox data-image="画像/ArchiveView.png" data-title="Archive" data-subtitle="学んだことを、図鑑で振り返る。" data-description="学んだ内容を図鑑として振り返れます。"><img src="画像/ArchiveView.png" alt="NOVA archive screen"></figure>
+        <figure class="iphone-mockup gallery-phone float-soft delay-two" data-animate data-lightbox data-image="画像/StatsView.png" data-title="Stats" data-subtitle="成長が、見える。" data-description="正答率、学習数、XP、進捗をまとめて確認できます。"><img src="画像/StatsView.png" alt="NOVA stats screen"></figure>
+        <figure class="iphone-mockup gallery-phone float-soft delay-three" data-animate data-lightbox data-image="画像/MissionView.png" data-title="Mission" data-subtitle="今日の目的を、ひとつずつ。" data-description="毎日のミッションが、学習のきっかけをつくります。"><img src="画像/MissionView.png" alt="NOVA mission screen"></figure>
+        <figure class="iphone-mockup gallery-phone float-soft" data-animate data-lightbox data-image="画像/FocusTimerView.png" data-title="Focus Timer" data-subtitle="集中を、静かに積み重ねる。" data-description="短い集中時間を設定して、学習に入りやすくします。"><img src="画像/FocusTimerView.png" alt="NOVA focus timer screen"></figure>
+        <figure class="iphone-mockup gallery-phone float-soft delay-one" data-animate data-lightbox data-image="画像/ProfileView.png" data-title="Profile" data-subtitle="探索の証を、美しく残す。" data-description="レベル、XP、達成状況をひとつにまとめて確認できます。"><img src="画像/ProfileView.png" alt="NOVA profile screen"></figure>
+      </div>
+    </section>
+
+    <section class="section categories-section" id="categories">
+      <div class="section-heading centered" data-animate>
+        <p class="eyebrow">Explore Categories</p>
+        <h2>宇宙を、テーマごとに旅する。</h2>
+        <p>基礎から未来の応用まで。知りたい分野を選び、少しずつ理解を深めていけます。</p>
+      </div>
+      <div class="category-grid">
+        <article class="category-card float-soft" data-animate>
+          <h3>🪐 基礎宇宙</h3>
+          <p>宇宙を学ぶ最初の一歩。</p>
+          <div class="topic-list">
+            <span>太陽系</span><span>惑星</span><span>月探査</span><span>火星</span><span>小惑星</span><span>天文学</span>
+          </div>
+        </article>
+        <article class="category-card float-soft delay-one" data-animate>
+          <h3>🌌 恒星・銀河・宇宙論</h3>
+          <p>宇宙の広がりと構造を知る。</p>
+          <div class="topic-list">
+            <span>恒星</span><span>星雲</span><span>銀河</span><span>ブラックホール</span><span>宇宙論</span><span>系外惑星</span><span>宇宙物理</span>
+          </div>
+        </article>
+        <article class="category-card float-soft delay-two" data-animate>
+          <h3>🚀 宇宙開発・探査</h3>
+          <p>宇宙へ行くための技術を学ぶ。</p>
+          <div class="topic-list">
+            <span>ロケット工学</span><span>再使用ロケット</span><span>宇宙技術</span><span>探査機</span><span>人工衛星</span><span>衛星測位</span><span>宇宙望遠鏡</span>
+          </div>
+        </article>
+        <article class="category-card float-soft delay-three" data-animate>
+          <h3>🛰 組織・ミッション</h3>
+          <p>世界の宇宙開発と有人宇宙活動。</p>
+          <div class="topic-list">
+            <span>ISS</span><span>JAXA</span><span>SpaceX</span><span>宇宙開発史</span><span>宇宙飛行士</span><span>月面基地</span>
+          </div>
+        </article>
+        <article class="category-card float-soft" data-animate>
+          <h3>🔬 未来・応用</h3>
+          <p>宇宙が広げる未来の可能性。</p>
+          <div class="topic-list">
+            <span>宇宙AI</span><span>宇宙ビジネス</span><span>宇宙医学</span><span>宇宙生命</span><span>宇宙天気</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section features-section" id="features">
+      <div class="section-heading centered" data-animate>
+        <p class="eyebrow">Features</p>
+        <h2>知識が、星のようにつながる。</h2>
+        <p>答える。進む。深める。振り返る。</p>
+      </div>
+
+      <div class="feature-showcase">
+        <article class="feature-item" data-animate data-lightbox data-image="画像/QuizView.png" data-title="Space Quiz" data-subtitle="一問ずつ、宇宙が近づく。" data-description="宇宙の知識を、短いクイズで少しずつ深められます。太陽系、惑星、探査、宇宙開発など、幅広いテーマをゲーム感覚で学べます。">
+          <figure class="iphone-mockup compact float-soft">
+            <img src="画像/QuizView.png" alt="NOVA quiz screen">
+          </figure>
+          <div>
+            <span class="feature-kicker">01</span>
+            <h3>Space Quiz</h3>
+            <p>一問ずつ、宇宙が近づく。</p>
+          </div>
+        </article>
+
+        <article class="feature-item" data-animate data-lightbox data-image="画像/GalaxyView.png" data-title="Galaxy Map" data-subtitle="知識が増えるほど、銀河が広がる。" data-description="学習の進み具合に合わせて銀河が広がり、新しい惑星やエリアが解放されます。知識が増えるほど、自分だけの宇宙が広がっていきます。">
+          <figure class="iphone-mockup compact float-soft delay-one">
+            <img src="画像/GalaxyView.png" alt="NOVA galaxy map screen">
+          </figure>
+          <div>
+            <span class="feature-kicker">02</span>
+            <h3>Galaxy Map</h3>
+            <p>学びの現在地を、美しく見渡す。</p>
+          </div>
+        </article>
+
+        <article class="feature-item" data-animate data-lightbox data-image="画像/ArchiveView.png" data-title="Archive" data-subtitle="学んだことを、図鑑で振り返る。" data-description="学んだ内容を図鑑として振り返れます。惑星、衛星、探査機、宇宙現象などを整理し、知識をあとから確認できます。">
+          <figure class="iphone-mockup compact float-soft delay-two">
+            <img src="画像/ArchiveView.png" alt="NOVA archive screen">
+          </figure>
+          <div>
+            <span class="feature-kicker">03</span>
+            <h3>Archive</h3>
+            <p>知識を深める、静かなライブラリ。</p>
+          </div>
+        </article>
+
+        <article class="feature-item" data-animate data-lightbox data-image="画像/StatsView.png" data-title="Stats" data-subtitle="成長が、見える。" data-description="正答率、学習数、XP、進捗をまとめて確認できます。自分の成長が見えることで、学びを続けやすくなります。">
+          <figure class="iphone-mockup compact float-soft delay-three">
+            <img src="画像/StatsView.png" alt="NOVA learning stats screen">
+          </figure>
+          <div>
+            <span class="feature-kicker">04</span>
+            <h3>Stats</h3>
+            <p>成長を、数字ではなく実感へ。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section faq-section" id="faq">
+      <div class="section-heading centered" data-animate>
+        <p class="eyebrow">FAQ</p>
+        <h2>よくある質問</h2>
+      </div>
+      <div class="faq-list" data-animate>
+        <details>
+          <summary>宇宙初心者でも使えますか？</summary>
+          <p>はい。基礎カテゴリと短いクイズから始められます。</p>
+        </details>
+        <details>
+          <summary>どんな分野を学べますか？</summary>
+          <p>太陽系、銀河、探査、宇宙開発、未来技術まで学べます。</p>
+        </details>
+        <details>
+          <summary>料金はかかりますか？</summary>
+          <p>料金は公開時にApp Storeでお知らせします。</p>
+        </details>
+        <details>
+          <summary>いつ公開されますか？</summary>
+          <p>現在準備中です。公開日は決まり次第お知らせします。</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="section next-section" id="next">
+      <div class="section-heading centered" data-animate>
+        <p class="eyebrow">The Next Mission</p>
+        <h2>The journey has just begun.</h2>
+        <p>公開後も、NOVAの宇宙は広がり続けます。</p>
+      </div>
+      <div class="next-grid">
+        <article data-animate><strong>AI Learning Assistant</strong><span>Coming Soon</span></article>
+        <article data-animate><strong>English Mode</strong><span>Coming Soon</span></article>
+        <article data-animate><strong>Achievements</strong><span>Coming Soon</span></article>
+        <article data-animate><strong>New Galaxy</strong><span>Coming Soon</span></article>
+        <article data-animate><strong>Community</strong><span>Coming Soon</span></article>
+        <article data-animate><strong>Widgets</strong><span>Coming Soon</span></article>
+        <article data-animate><strong>AR Experience</strong><span>Coming Soon</span></article>
+        <article data-animate><strong>More Space Content</strong><span>Coming Soon</span></article>
+      </div>
+    </section>
+
+    <section class="section download-section" id="download">
+      <div class="download-panel" data-animate>
+        <div class="download-copy">
+          <p class="eyebrow">Download / Coming Soon</p>
+          <h2>宇宙への旅を、NOVAから。</h2>
+          <p>App Storeで公開予定</p>
+        </div>
+        <a class="app-store-badge disabled-cta" aria-label="近日公開" aria-disabled="true">
+          <strong>近日公開</strong>
+          <span>App Storeで公開予定</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <div class="lightbox" id="screenshotLightbox" aria-hidden="true">
+    <div class="lightbox-backdrop" data-lightbox-close></div>
+    <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="lightboxTitle">
+      <button class="lightbox-close" type="button" aria-label="閉じる" data-lightbox-close>×</button>
+      <figure class="lightbox-phone">
+        <img id="lightboxImage" src="" alt="">
+      </figure>
+      <div class="lightbox-caption">
+        <h3 id="lightboxTitle"></h3>
+        <p class="lightbox-subtitle" id="lightboxSubtitle"></p>
+        <p id="lightboxDescription"></p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div>
+      <a class="brand" href="#hero" aria-label="NOVA home">
+        <img class="brand-logo" src="画像/NOVA.png" alt="" aria-hidden="true">
+        <span>NOVA</span>
+      </a>
+      <p>宇宙を、ゲームのように学ぶ。</p>
+    </div>
+    <span>© 2026 NOVA</span>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Use</a>
+      <a href="support.html">Support / Contact</a>
+    </nav>
+  </footer>
+
+  <script src="NOVA.js"></script>
+</body>
+</html>
