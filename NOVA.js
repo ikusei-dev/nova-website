@@ -146,8 +146,53 @@ counters.forEach((counter) => counterObserver.observe(counter));
 
 // Adds a subtle active state to the header after the user starts scrolling.
 const header = document.querySelector(".site-header");
+const navLinks = Array.from(document.querySelectorAll(".nav-links a[href^='#']"));
+const navTargets = navLinks
+  .map((link) => {
+    const target = document.querySelector(link.getAttribute("href"));
+    return target ? { link, target } : null;
+  })
+  .filter(Boolean);
+let activeNavId = "";
+
 function updateHeader() {
   header.classList.toggle("has-scrolled", window.scrollY > 20);
+}
+
+function setActiveNavLink(sectionId) {
+  if (sectionId === activeNavId) return;
+
+  activeNavId = sectionId;
+  navTargets.forEach(({ link, target }) => {
+    const isActive = target.id === sectionId;
+    link.classList.toggle("is-active", isActive);
+
+    if (isActive) {
+      link.setAttribute("aria-current", "true");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+}
+
+function updateActiveNav() {
+  if (!navTargets.length) return;
+
+  const viewportHeight = Math.max(window.innerHeight, 1);
+  let currentId = "";
+  let strongestVisibility = 0;
+
+  navTargets.forEach(({ target }) => {
+    const rect = target.getBoundingClientRect();
+    const visibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
+
+    if (visibleHeight > strongestVisibility) {
+      strongestVisibility = visibleHeight;
+      currentId = target.id;
+    }
+  });
+
+  setActiveNavLink(strongestVisibility > 0 ? currentId : "");
 }
 
 const lightbox = document.getElementById("screenshotLightbox");
@@ -299,8 +344,12 @@ function updateParallax() {
   const rocketProgress = Math.min(Math.max(scrollShift / maxScroll, 0), 1);
   const heroProgress = Math.min(Math.max(scrollShift / Math.max(height * 0.88, 1), 0), 1);
   const root = document.documentElement.style;
+  const glassX = prefersReducedMotion() ? 0 : pointerX * 12;
+  const glassY = prefersReducedMotion() ? 0 : pointerY * 12;
   root.setProperty("--hero-parallax-x", `${(x * 0.22).toFixed(2)}px`);
   root.setProperty("--hero-parallax-y", `${(y * 0.22).toFixed(2)}px`);
+  root.setProperty("--glass-shadow-x", `${glassX.toFixed(2)}px`);
+  root.setProperty("--glass-shadow-y", `${glassY.toFixed(2)}px`);
   root.setProperty("--halo-parallax-x", `${(x * 0.35).toFixed(2)}px`);
   root.setProperty("--halo-parallax-y", `${(y * 0.35).toFixed(2)}px`);
   root.setProperty("--planet-a-x", `${(x * -0.45).toFixed(2)}px`);
@@ -321,12 +370,17 @@ function updateParallax() {
   const atmosphere = smoothRange(rocketProgress, 0.22, 0.48) * (1 - smoothRange(rocketProgress, 0.58, 0.78));
   const space = 0.12 + smoothRange(rocketProgress, 0.42, 0.76) * 0.22;
   const deep = smoothRange(rocketProgress, 0.62, 1);
+  const voyageWave = prefersReducedMotion() ? 0.5 : 0.5 + Math.sin(rocketProgress * Math.PI * 2) * 0.5;
+  const voyageDepth = 0.06 + smoothRange(rocketProgress, 0.18, 0.92) * 0.05;
   root.setProperty("--journey-earth-opacity", (0.16 * earth).toFixed(3));
   root.setProperty("--journey-cloud-opacity", (0.16 * clouds).toFixed(3));
   root.setProperty("--journey-atmo-opacity", (0.14 * atmosphere).toFixed(3));
   root.setProperty("--journey-space-opacity", space.toFixed(3));
   root.setProperty("--journey-deep-opacity", (0.12 * deep).toFixed(3));
   root.setProperty("--journey-deep-soft-opacity", (0.086 * deep).toFixed(3));
+  root.setProperty("--voyage-cyan-opacity", (0.03 + voyageWave * 0.016).toFixed(3));
+  root.setProperty("--voyage-violet-opacity", (0.022 + (1 - voyageWave) * 0.016).toFixed(3));
+  root.setProperty("--voyage-depth-opacity", voyageDepth.toFixed(3));
   root.setProperty("--scroll-shift", `${scrollShift.toFixed(2)}px`);
   root.setProperty("--rocket-progress", rocketProgress.toFixed(4));
   root.setProperty("--rocket-progress-percent", `${(rocketProgress * 100).toFixed(2)}%`);
@@ -343,6 +397,7 @@ function requestScrollUpdate() {
 
   scrollFrame = requestAnimationFrame(() => {
     updateHeader();
+    updateActiveNav();
     updateParallax();
     scrollFrame = null;
   });
@@ -384,6 +439,7 @@ function resetHeroPhoneTilt() {
 
 function handleResize() {
   resizeCanvas();
+  updateActiveNav();
   if (prefersReducedMotion()) {
     drawStars();
   }
@@ -451,4 +507,5 @@ setupGalaxyMotionTargets();
 resizeCanvas();
 drawStars();
 updateHeader();
+updateActiveNav();
 updateParallax();
