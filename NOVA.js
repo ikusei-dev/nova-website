@@ -88,11 +88,16 @@ const counters = document.querySelectorAll("[data-counter]");
 const launchIntro = document.querySelector(".launch-intro");
 const journeySection = document.querySelector(".journey-section");
 const journeySteps = document.querySelectorAll(".journey-orbit span");
+const siteFooter = document.querySelector(".site-footer");
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add("is-visible");
+        if (entry.target.classList.contains("journey-orbit") && !prefersReducedMotion()) {
+          entry.target.classList.add("is-revealing");
+          window.setTimeout(() => entry.target.classList.remove("is-revealing"), 1900);
+        }
         observer.unobserve(entry.target);
       }
     });
@@ -102,6 +107,7 @@ const observer = new IntersectionObserver(
 
 sections.forEach((section) => observer.observe(section));
 animatedElements.forEach((element) => observer.observe(element));
+if (siteFooter) observer.observe(siteFooter);
 
 const counterObserver = new IntersectionObserver(
   (entries) => {
@@ -220,6 +226,15 @@ function updateLaunchIntro() {
     root.setProperty("--launch-intro-opacity", "1");
     root.setProperty("--launch-pad-glow-opacity", "0.1");
     root.setProperty("--launch-cloud-opacity", "0.08");
+    root.setProperty("--launch-cloud-field-opacity", "0.06");
+    root.setProperty("--launch-cloud-y-slow", "0px");
+    root.setProperty("--launch-cloud-y-medium", "0px");
+    root.setProperty("--launch-cloud-y-fast", "0px");
+    root.setProperty("--launch-cloud-y-near", "0px");
+    root.setProperty("--launch-cloud-drift", "0px");
+    root.setProperty("--launch-cloud-drift-small", "0px");
+    root.setProperty("--launch-cloud-drift-mid", "0px");
+    root.setProperty("--launch-cloud-drift-reverse", "0px");
     root.setProperty("--launch-atmo-opacity", "0.06");
     root.setProperty("--launch-space-opacity", "0.18");
     root.setProperty("--launch-particle-opacity", "0");
@@ -241,6 +256,10 @@ function updateLaunchIntro() {
   const ignitionPressure = Math.min(progress / 0.24, 1);
   const flameScale = 0.62 + ignitionPressure * 1.74 + liftoffProgress * 1.18;
   const smokeScale = 1 + ignitionPressure * 0.54 + liftoffProgress * 0.68;
+  const cloudPresence = smoothRange(progress, 0.04, 0.14) * (1 - smoothRange(progress, 0.5, 0.66));
+  const cloudDensity = smoothRange(progress, 0.25, 0.34) * (1 - smoothRange(progress, 0.4, 0.56));
+  const cloudOpacity = cloudPresence * (0.34 + cloudDensity * 0.24);
+  const cloudDrift = Math.sin(progress * Math.PI) * 42;
 
   launchIntro.classList.toggle("is-launching", isLaunching);
 
@@ -255,6 +274,15 @@ function updateLaunchIntro() {
   root.setProperty("--launch-intro-opacity", fade.toFixed(3));
   root.setProperty("--launch-pad-glow-opacity", (0.08 + ignitionPressure * 0.32).toFixed(3));
   root.setProperty("--launch-cloud-opacity", Math.min(Math.max((progress - 0.18) / 0.38, 0), 0.24).toFixed(3));
+  root.setProperty("--launch-cloud-field-opacity", cloudOpacity.toFixed(3));
+  root.setProperty("--launch-cloud-y-slow", `${(72 + progress * 96).toFixed(1)}px`);
+  root.setProperty("--launch-cloud-y-medium", `${(92 + progress * 156).toFixed(1)}px`);
+  root.setProperty("--launch-cloud-y-fast", `${(118 + progress * 236).toFixed(1)}px`);
+  root.setProperty("--launch-cloud-y-near", `${(54 + progress * 188).toFixed(1)}px`);
+  root.setProperty("--launch-cloud-drift", `${cloudDrift.toFixed(1)}px`);
+  root.setProperty("--launch-cloud-drift-small", `${(cloudDrift * 0.34).toFixed(1)}px`);
+  root.setProperty("--launch-cloud-drift-mid", `${(cloudDrift * 0.62).toFixed(1)}px`);
+  root.setProperty("--launch-cloud-drift-reverse", `${(-cloudDrift * 0.45).toFixed(1)}px`);
   root.setProperty("--launch-atmo-opacity", Math.min(Math.max((progress - 0.38) / 0.42, 0), 0.22).toFixed(3));
   root.setProperty("--launch-space-opacity", Math.min(Math.max((progress - 0.56) / 0.36, 0), 0.38).toFixed(3));
   root.setProperty("--launch-particle-opacity", (isLaunching || liftoffProgress > 0 ? Math.min(0.74, 0.2 + progress * 0.78) : 0).toFixed(3));

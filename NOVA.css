@@ -54,6 +54,15 @@
   --launch-intro-opacity: 1;
   --launch-pad-glow-opacity: 0.18;
   --launch-cloud-opacity: 0;
+  --launch-cloud-field-opacity: 0;
+  --launch-cloud-y-slow: 0px;
+  --launch-cloud-y-medium: 0px;
+  --launch-cloud-y-fast: 0px;
+  --launch-cloud-y-near: 0px;
+  --launch-cloud-drift: 0px;
+  --launch-cloud-drift-small: 0px;
+  --launch-cloud-drift-mid: 0px;
+  --launch-cloud-drift-reverse: 0px;
   --launch-atmo-opacity: 0;
   --launch-space-opacity: 0;
   --launch-particle-opacity: 0;
@@ -205,6 +214,86 @@ img {
   filter: drop-shadow(0 0 12px rgba(121, 223, 255, 0.26));
   opacity: var(--launch-particle-opacity);
   animation: launchParticles 3.2s ease-in-out infinite;
+}
+
+.launch-clouds {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--launch-cloud-field-opacity);
+}
+
+.launch-clouds-back {
+  z-index: 2;
+}
+
+.launch-clouds-front {
+  z-index: 3;
+  mix-blend-mode: screen;
+}
+
+.launch-cloud-layer {
+  position: absolute;
+  height: clamp(150px, 22vw, 280px);
+  background:
+    radial-gradient(ellipse at 16% 62%, rgba(255, 255, 255, 0.46) 0 16%, rgba(235, 246, 255, 0.22) 27%, transparent 48%),
+    radial-gradient(ellipse at 34% 44%, rgba(255, 255, 255, 0.56) 0 18%, rgba(226, 238, 255, 0.24) 31%, transparent 54%),
+    radial-gradient(ellipse at 56% 58%, rgba(241, 248, 255, 0.42) 0 19%, rgba(196, 222, 255, 0.16) 33%, transparent 56%),
+    radial-gradient(ellipse at 78% 48%, rgba(255, 255, 255, 0.34) 0 15%, rgba(226, 238, 255, 0.14) 28%, transparent 50%);
+  filter: blur(18px);
+  transform: translate3d(0, 0, 0);
+  will-change: transform, opacity;
+}
+
+.launch-cloud-layer::before,
+.launch-cloud-layer::after {
+  position: absolute;
+  inset: -18% -8%;
+  background:
+    radial-gradient(ellipse at 24% 54%, rgba(255, 255, 255, 0.26) 0 14%, transparent 42%),
+    radial-gradient(ellipse at 48% 36%, rgba(229, 242, 255, 0.22) 0 12%, transparent 38%),
+    radial-gradient(ellipse at 70% 64%, rgba(255, 255, 255, 0.18) 0 13%, transparent 40%);
+  content: "";
+  filter: blur(20px);
+}
+
+.launch-cloud-layer::after {
+  inset: 8% 10% -24%;
+  opacity: 0.58;
+  transform: translate3d(8%, 10%, 0) scale(0.76);
+}
+
+.cloud-layer-one {
+  top: 57%;
+  left: 8%;
+  width: min(760px, 86vw);
+  opacity: 0.68;
+  transform: translate3d(calc(var(--launch-cloud-drift-reverse) - 2vw), var(--launch-cloud-y-slow), 0) scale(1.05);
+}
+
+.cloud-layer-two {
+  top: 47%;
+  right: 6%;
+  width: min(680px, 78vw);
+  opacity: 0.5;
+  transform: translate3d(var(--launch-cloud-drift-mid), var(--launch-cloud-y-medium), 0) scale(0.88);
+}
+
+.cloud-layer-three {
+  top: 58%;
+  left: 50%;
+  width: min(880px, 98vw);
+  opacity: 0.46;
+  transform: translate3d(calc(-50% + var(--launch-cloud-drift-small)), var(--launch-cloud-y-fast), 0) scale(1.14);
+}
+
+.cloud-layer-four {
+  top: 38%;
+  left: 20%;
+  width: min(540px, 70vw);
+  height: clamp(120px, 18vw, 220px);
+  opacity: 0.34;
+  transform: translate3d(var(--launch-cloud-drift-reverse), var(--launch-cloud-y-near), 0) scale(0.78);
 }
 
 .launch-copy {
@@ -736,6 +825,42 @@ p {
   line-height: 1.24;
 }
 
+.js-enabled .hero-copy h1,
+.js-enabled .hero-copy .hero-lead {
+  opacity: 0;
+  filter: blur(18px);
+  transform: scale(1.06);
+  transform-origin: left center;
+}
+
+.hero-copy h1 {
+  position: relative;
+}
+
+.js-enabled .hero-copy h1::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: transparent;
+  background:
+    linear-gradient(
+      105deg,
+      transparent 0%,
+      transparent 42%,
+      rgba(208, 246, 255, 0.08) 47%,
+      rgba(255, 255, 255, 0.62) 50%,
+      rgba(121, 223, 255, 0.22) 53%,
+      transparent 59%,
+      transparent 100%
+    );
+  background-clip: text;
+  background-size: 240% 100%;
+  content: "NOVA";
+  filter: drop-shadow(0 0 10px rgba(121, 223, 255, 0.16));
+  opacity: 0;
+  -webkit-background-clip: text;
+}
+
 .hero-subcopy,
 .copy-block p,
 .section-heading p {
@@ -1257,6 +1382,7 @@ p {
 }
 
 .journey-orbit span {
+  position: relative;
   flex: 0 0 auto;
   display: inline-flex;
   min-width: 92px;
@@ -1270,7 +1396,99 @@ p {
   color: rgba(247, 249, 255, 0.9);
   font-weight: 900;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  transition: border-color 320ms ease, background 320ms ease, box-shadow 320ms ease, color 320ms ease, transform 320ms ease;
+  overflow: hidden;
+  transition:
+    opacity 760ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 760ms cubic-bezier(0.16, 1, 0.3, 1),
+    translate 760ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 320ms ease,
+    background 320ms ease,
+    box-shadow 320ms ease,
+    color 320ms ease,
+    transform 320ms ease;
+}
+
+.journey-orbit span::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(105deg, transparent 16%, rgba(226, 248, 255, 0.18), rgba(121, 223, 255, 0.12), transparent 68%);
+  content: "";
+  opacity: 0;
+  transform: translate3d(-120%, 0, 0);
+}
+
+.js-enabled .journey-orbit:not(.is-visible) span {
+  opacity: 0;
+  filter: blur(6px);
+  translate: 0 14px;
+}
+
+.js-enabled .journey-orbit.is-visible span {
+  opacity: 1;
+  filter: blur(0);
+  translate: 0 0;
+}
+
+.js-enabled .journey-orbit.is-revealing span::after {
+  animation: journeyCardHighlight 760ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.js-enabled .journey-orbit.is-revealing span:nth-of-type(1) {
+  transition-delay: 80ms;
+}
+
+.js-enabled .journey-orbit.is-revealing span:nth-of-type(1)::after {
+  animation-delay: 80ms;
+}
+
+.js-enabled .journey-orbit.is-revealing span:nth-of-type(2) {
+  transition-delay: 220ms;
+}
+
+.js-enabled .journey-orbit.is-revealing span:nth-of-type(2)::after {
+  animation-delay: 220ms;
+}
+
+.js-enabled .journey-orbit.is-revealing span:nth-of-type(3) {
+  transition-delay: 360ms;
+}
+
+.js-enabled .journey-orbit.is-revealing span:nth-of-type(3)::after {
+  animation-delay: 360ms;
+}
+
+.js-enabled .journey-orbit.is-revealing span:nth-of-type(4) {
+  transition-delay: 500ms;
+}
+
+.js-enabled .journey-orbit.is-revealing span:nth-of-type(4)::after {
+  animation-delay: 500ms;
+}
+
+.js-enabled .journey-orbit.is-revealing span:nth-of-type(5) {
+  transition-delay: 640ms;
+}
+
+.js-enabled .journey-orbit.is-revealing span:nth-of-type(5)::after {
+  animation-delay: 640ms;
+}
+
+.js-enabled .journey-orbit.is-revealing span:nth-of-type(6) {
+  transition-delay: 780ms;
+}
+
+.js-enabled .journey-orbit.is-revealing span:nth-of-type(6)::after {
+  animation-delay: 780ms;
+}
+
+.js-enabled .journey-orbit.is-revealing span:nth-of-type(7) {
+  transition-delay: 920ms;
+}
+
+.js-enabled .journey-orbit.is-revealing span:nth-of-type(7)::after {
+  animation-delay: 920ms;
 }
 
 .journey-orbit span.is-passed {
@@ -1301,15 +1519,34 @@ p {
 
 .galaxy-motion {
   position: relative;
+  isolation: isolate;
 }
 
 .galaxy-motion.is-visible {
-  animation: galaxySurfaceGlow 8s ease-in-out infinite;
+  animation: none;
+}
+
+.galaxy-motion::before {
+  position: absolute;
+  inset: -22px;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 38% 42%, rgba(121, 223, 255, 0.16), transparent 34%),
+    radial-gradient(circle at 62% 58%, rgba(154, 134, 255, 0.1), transparent 38%);
+  content: "";
+  opacity: 0;
+  transform: translate3d(0, 0, 0) rotate(-2deg) scale(0.985);
+  transform-origin: center;
+  transition: opacity 720ms ease;
+  animation: galaxyGlowDrift 38s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+  animation-play-state: paused;
+  will-change: transform;
 }
 
 .galaxy-motion::after {
   position: absolute;
-  inset: -12px;
+  inset: -14px;
   z-index: -1;
   border: 1px solid rgba(121, 223, 255, 0.16);
   border-radius: inherit;
@@ -1321,14 +1558,26 @@ p {
   filter: blur(7px);
   opacity: 0;
   content: "";
-  animation: galaxyOrbitGlow 12s linear infinite;
-  transition: opacity 620ms ease;
+  transform: translate3d(0, 0, 0) rotate(0deg);
+  transform-origin: center;
+  transition: opacity 720ms ease;
+  animation: galaxyOrbitGlow 32s linear infinite;
+  animation-play-state: paused;
+  will-change: transform;
+}
+
+.galaxy-motion.is-visible::before,
+.feature-item.galaxy-motion.is-visible::before,
+.gallery-phone.galaxy-motion.is-visible::before {
+  opacity: 0.42;
+  animation-play-state: running;
 }
 
 .galaxy-motion.is-visible::after,
 .feature-item.galaxy-motion.is-visible::after,
 .gallery-phone.galaxy-motion.is-visible::after {
-  opacity: 0.72;
+  opacity: 0.58;
+  animation-play-state: running;
 }
 
 .category-grid {
@@ -1766,6 +2015,8 @@ p {
 }
 
 .site-footer {
+  position: relative;
+  isolation: isolate;
   display: grid;
   grid-template-columns: minmax(220px, 1fr) auto;
   width: min(1160px, calc(100% - 44px));
@@ -1773,8 +2024,62 @@ p {
   gap: 24px;
   margin: 0 auto;
   padding: 38px 0 54px;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid rgba(226, 238, 255, 0.16);
   color: var(--muted);
+  opacity: 0;
+  overflow: hidden;
+  translate: 0 24px;
+  transition:
+    opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
+    translate 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.site-footer::before,
+.site-footer::after {
+  position: absolute;
+  inset: -46px -8vw -30px;
+  z-index: -1;
+  pointer-events: none;
+  content: "";
+}
+
+.site-footer::before {
+  background:
+    radial-gradient(circle at 12% 34%, rgba(255, 255, 255, 0.26) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 28% 78%, rgba(121, 223, 255, 0.22) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 46% 22%, rgba(255, 255, 255, 0.2) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 62% 64%, rgba(154, 134, 255, 0.18) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 76% 30%, rgba(255, 255, 255, 0.2) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 88% 72%, rgba(121, 223, 255, 0.18) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 18% 58%, rgba(255, 255, 255, 0.16) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 54% 84%, rgba(121, 223, 255, 0.16) 0 1px, transparent 1.8px),
+    linear-gradient(180deg, rgba(0, 2, 8, 0.22), rgba(0, 2, 8, 0.64));
+  opacity: 0;
+  animation: footerStarsTwinkle 34s ease-in-out infinite;
+  transition: opacity 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.site-footer::after {
+  background:
+    radial-gradient(ellipse at 50% 36%, rgba(121, 223, 255, 0.1), transparent 34rem),
+    radial-gradient(ellipse at 64% 54%, rgba(154, 134, 255, 0.08), transparent 28rem),
+    linear-gradient(180deg, rgba(1, 3, 9, 0.18), rgba(0, 2, 8, 0.72));
+  opacity: 0;
+  animation: footerAmbientPulse 38s ease-in-out infinite;
+  transition: opacity 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.site-footer.is-visible {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.site-footer.is-visible::before {
+  opacity: 0.72;
+}
+
+.site-footer.is-visible::after {
+  opacity: 1;
 }
 
 .site-footer p {
@@ -2104,6 +2409,20 @@ p {
   animation-delay: 290ms;
 }
 
+.js-enabled .hero.section.is-visible .hero-copy h1 {
+  animation: heroTitleReveal 1200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, filter, transform;
+}
+
+.js-enabled .hero.section.is-visible .hero-copy h1::after {
+  animation: heroTitleSweep 600ms cubic-bezier(0.16, 1, 0.3, 1) 1100ms both;
+}
+
+.js-enabled .hero.section.is-visible .hero-copy .hero-lead {
+  animation: heroTitleReveal 1200ms cubic-bezier(0.16, 1, 0.3, 1) 250ms both;
+  will-change: opacity, filter, transform;
+}
+
 .product-row .copy-block,
 .features-section .section-heading,
 .what-panel,
@@ -2159,6 +2478,37 @@ p {
 
   to {
     opacity: 1;
+  }
+}
+
+@keyframes heroTitleReveal {
+  from {
+    opacity: 0;
+    filter: blur(18px);
+    transform: scale(1.06);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+
+@keyframes heroTitleSweep {
+  0%,
+  12% {
+    background-position: 130% 50%;
+    opacity: 0;
+  }
+
+  38% {
+    opacity: 0.58;
+  }
+
+  100% {
+    background-position: -80% 50%;
+    opacity: 0;
   }
 }
 
@@ -2268,19 +2618,23 @@ p {
 }
 
 @keyframes galaxyOrbitGlow {
+  from {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
   to {
-    transform: rotate(360deg);
+    transform: translate3d(0, 0, 0) rotate(360deg);
   }
 }
 
-@keyframes galaxySurfaceGlow {
+@keyframes galaxyGlowDrift {
   0%,
   100% {
-    filter: drop-shadow(0 0 0 rgba(121, 223, 255, 0));
+    transform: translate3d(0, 0, 0) rotate(-2deg) scale(0.985);
   }
 
   50% {
-    filter: drop-shadow(0 0 18px rgba(121, 223, 255, 0.16));
+    transform: translate3d(0, -5px, 0) rotate(2deg) scale(1.015);
   }
 }
 
@@ -2300,9 +2654,51 @@ p {
   }
 }
 
+@keyframes journeyCardHighlight {
+  0% {
+    opacity: 0;
+    transform: translate3d(-120%, 0, 0);
+  }
+
+  45% {
+    opacity: 0.72;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(120%, 0, 0);
+  }
+}
+
 @keyframes radarSweep {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes footerStarsTwinkle {
+  0%,
+  100% {
+    opacity: 0.56;
+  }
+
+  45% {
+    opacity: 0.74;
+  }
+
+  70% {
+    opacity: 0.62;
+  }
+}
+
+@keyframes footerAmbientPulse {
+  0%,
+  100% {
+    opacity: 0.86;
+  }
+
+  50% {
+    opacity: 1;
   }
 }
 
@@ -2720,6 +3116,57 @@ p {
     transform: rotate(2deg);
   }
 
+  .js-enabled .hero-copy h1,
+  .js-enabled .hero-copy .hero-lead,
+  .js-enabled .hero.section.is-visible .hero-copy h1,
+  .js-enabled .hero.section.is-visible .hero-copy .hero-lead {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    animation: none;
+  }
+
+  .js-enabled .hero-copy h1::after,
+  .js-enabled .hero.section.is-visible .hero-copy h1::after {
+    content: none;
+    animation: none;
+  }
+
+  .galaxy-motion::before,
+  .galaxy-motion::after {
+    animation: none;
+    transform: none;
+    will-change: auto;
+  }
+
+  .js-enabled .journey-orbit span,
+  .js-enabled .journey-orbit:not(.is-visible) span,
+  .js-enabled .journey-orbit.is-visible span {
+    opacity: 1;
+    filter: none;
+    translate: none;
+    animation: none;
+  }
+
+  .site-footer {
+    animation: none;
+    opacity: 1;
+    translate: none;
+  }
+
+  .site-footer::before,
+  .site-footer::after {
+    animation: none;
+  }
+
+  .site-footer::before {
+    opacity: 0.72;
+  }
+
+  .site-footer::after {
+    opacity: 1;
+  }
+
   .rocket,
   .rocket-trail,
   .rocket-spark {
@@ -2742,6 +3189,15 @@ p {
   .launch-flame,
   .launch-smoke {
     opacity: 0.24;
+  }
+
+  .launch-clouds {
+    opacity: 0.06;
+  }
+
+  .launch-cloud-layer {
+    transform: none;
+    will-change: auto;
   }
 
   .launch-intro.is-launching .launch-pad {
