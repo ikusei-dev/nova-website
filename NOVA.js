@@ -105,10 +105,6 @@ const observer = new IntersectionObserver(
   { threshold: 0.18 }
 );
 
-sections.forEach((section) => observer.observe(section));
-animatedElements.forEach((element) => observer.observe(element));
-if (siteFooter) observer.observe(siteFooter);
-
 const counterObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -142,8 +138,6 @@ const counterObserver = new IntersectionObserver(
   { threshold: 0.65 }
 );
 
-counters.forEach((counter) => counterObserver.observe(counter));
-
 // Adds a subtle active state to the header after the user starts scrolling.
 const header = document.querySelector(".site-header");
 const navLinks = Array.from(document.querySelectorAll(".nav-links a[href^='#']"));
@@ -154,9 +148,35 @@ const navTargets = navLinks
   })
   .filter(Boolean);
 let activeNavId = "";
+let deferredFeaturesInitialized = false;
 
 function updateHeader() {
+  if (!header) return;
   header.classList.toggle("has-scrolled", window.scrollY > 20);
+}
+
+function scheduleIdleWork(callback) {
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(callback, { timeout: 1400 });
+    return;
+  }
+
+  window.setTimeout(callback, 320);
+}
+
+function initializeDeferredFeatures() {
+  if (deferredFeaturesInitialized) return;
+
+  deferredFeaturesInitialized = true;
+  sections.forEach((section) => observer.observe(section));
+  animatedElements.forEach((element) => observer.observe(element));
+  counters.forEach((counter) => counterObserver.observe(counter));
+  if (siteFooter) observer.observe(siteFooter);
+
+  setupLightboxTriggers();
+  setupGalaxyMotionTargets();
+  resizeCanvas();
+  drawStars();
 }
 
 function setActiveNavLink(sectionId) {
@@ -502,10 +522,10 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-setupLightboxTriggers();
-setupGalaxyMotionTargets();
-resizeCanvas();
-drawStars();
+if (header) header.classList.add("is-visible");
 updateHeader();
 updateActiveNav();
 updateParallax();
+window.requestAnimationFrame(() => {
+  scheduleIdleWork(initializeDeferredFeatures);
+});
