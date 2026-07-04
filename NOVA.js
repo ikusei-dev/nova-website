@@ -149,6 +149,13 @@ const navTargets = navLinks
   .filter(Boolean);
 let activeNavId = "";
 let deferredFeaturesInitialized = false;
+const touchAnchorGesture = {
+  pointerId: null,
+  startX: 0,
+  startY: 0,
+  moved: false
+};
+const touchAnchorCancelDistance = 12;
 
 function updateHeader() {
   if (!header) return;
@@ -457,6 +464,38 @@ function resetHeroPhoneTilt() {
   heroPhone.classList.remove("is-tilting");
 }
 
+function trackTouchAnchorStart(event) {
+  if (event.pointerType !== "touch" && event.pointerType !== "pen") return;
+  if (!event.target.closest("a[href^='#']")) return;
+
+  touchAnchorGesture.pointerId = event.pointerId;
+  touchAnchorGesture.startX = event.clientX;
+  touchAnchorGesture.startY = event.clientY;
+  touchAnchorGesture.moved = false;
+}
+
+function trackTouchAnchorMove(event) {
+  if (event.pointerId !== touchAnchorGesture.pointerId) return;
+
+  const deltaX = event.clientX - touchAnchorGesture.startX;
+  const deltaY = event.clientY - touchAnchorGesture.startY;
+  if (Math.hypot(deltaX, deltaY) > touchAnchorCancelDistance) {
+    touchAnchorGesture.moved = true;
+  }
+}
+
+function resetTouchAnchorGesture(event) {
+  if (event.pointerId !== touchAnchorGesture.pointerId) return;
+
+  touchAnchorGesture.pointerId = null;
+  touchAnchorGesture.startX = 0;
+  touchAnchorGesture.startY = 0;
+}
+
+function shouldIgnoreTouchAnchorClick(target) {
+  return Boolean(target.closest("a[href^='#']") && touchAnchorGesture.moved);
+}
+
 function handleResize() {
   resizeCanvas();
   updateActiveNav();
@@ -481,6 +520,9 @@ function handleReducedMotionChange() {
 window.addEventListener("resize", handleResize);
 window.addEventListener("scroll", requestScrollUpdate, { passive: true });
 window.addEventListener("pointermove", handlePointerMove, { passive: true });
+document.addEventListener("pointerdown", trackTouchAnchorStart, { passive: true });
+document.addEventListener("pointermove", trackTouchAnchorMove, { passive: true });
+document.addEventListener("pointercancel", resetTouchAnchorGesture, { passive: true });
 if (reducedMotionQuery.addEventListener) {
   reducedMotionQuery.addEventListener("change", handleReducedMotionChange);
 } else {
@@ -491,6 +533,14 @@ if (heroVisual) {
   heroVisual.addEventListener("pointerleave", resetHeroPhoneTilt);
 }
 document.addEventListener("click", (event) => {
+  if (shouldIgnoreTouchAnchorClick(event.target)) {
+    event.preventDefault();
+    resetTouchAnchorGesture({ pointerId: touchAnchorGesture.pointerId });
+    return;
+  }
+
+  resetTouchAnchorGesture({ pointerId: touchAnchorGesture.pointerId });
+
   const disabledTarget = event.target.closest(".disabled-cta");
   if (disabledTarget) {
     event.preventDefault();
