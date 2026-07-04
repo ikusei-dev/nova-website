@@ -231,7 +231,7 @@ const heroVisual = document.querySelector(".hero-visual");
 const heroPhone = document.querySelector(".hero-phone");
 
 function setupGalaxyMotionTargets() {
-  document.querySelectorAll("[data-image='画像/optimized/GalaxyView-660.jpg']").forEach((target) => {
+  document.querySelectorAll("[data-image='images/optimized/GalaxyView-660.jpg']").forEach((target) => {
     target.classList.add("galaxy-motion");
   });
 }
