@@ -3007,6 +3007,16 @@ p {
 }
 
 @media (max-width: 900px) {
+  .site-header {
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .js-enabled .site-header[data-animate],
+  .js-enabled .site-header[data-animate].is-visible {
+    transform: translateX(-50%);
+  }
+
   .nav-links {
     display: none;
   }
@@ -3014,7 +3024,8 @@ p {
   .mobile-language-nav {
     display: flex;
     align-items: center;
-    margin-left: auto;
+    flex: 0 0 auto;
+    margin-left: 0;
   }
 
   .hero,
@@ -3092,13 +3103,26 @@ p {
 @media (max-width: 680px) {
   .site-header {
     top: 12px;
-    width: calc(100% - 24px);
+    width: calc(100% - 16px);
+    padding: 8px;
+  }
+
+  .language-switch {
+    gap: 1px;
+    padding: 2px;
+  }
+
+  .language-option {
+    min-width: 30px;
+    min-height: 26px;
+    padding: 0 8px;
+    font-size: 0.7rem;
   }
 
   .nav-cta {
     min-height: 38px;
-    padding: 0 14px;
-    font-size: 0.82rem;
+    padding: 0 10px;
+    font-size: 0.76rem;
   }
 
   .section {
