@@ -12,6 +12,121 @@ let pointerY = 0;
 let scrollShift = 0;
 let scrollFrame = null;
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+const languageStorageKey = "nova-language";
+const localizedTextNodes = [];
+const localizedAttributes = [];
+const pageCopy = {
+  ja: {
+    title: "NOVA | 宇宙を、ゲームのように学ぶ。",
+    description: "宇宙を、ゲームのように学ぶ。クイズ・銀河マップ・図鑑・ミッションで楽しく宇宙を学べる学習アプリ。"
+  },
+  en: {
+    title: "NOVA | Learn Space Like a Game",
+    description: "Learn space like a game. Explore the universe through quizzes, galaxy maps, collections, and missions."
+  }
+};
+const textTranslations = {
+  "宇宙を、ゲームのように学ぶ。": "Learn Space Like a Game",
+  "クイズ、銀河マップ、図鑑、ミッションで、宇宙の知識を楽しく積み重ねる学習アプリ。": "Build your knowledge of space through quizzes, galaxy maps, collections, and missions.",
+  "近日公開": "Coming Soon",
+  "App Storeで公開予定": "Planned for release on the App Store",
+  "宇宙の知識を、楽しく積み重ねる。": "Build your space knowledge, one step at a time.",
+  "NOVAは、クイズ、銀河マップ、図鑑、ミッションを通して、宇宙の知識を楽しく積み重ねられる学習アプリです。": "NOVA is a learning app that helps you build space knowledge through quizzes, galaxy maps, collections, and missions.",
+  "最初の一歩を、もっと美しく。": "Make the first step more beautiful.",
+  "宇宙に興味はある。": "You are curious about space.",
+  "でも、何から学べばいいのか分からない。": "But you may not know where to begin.",
+  "NOVAは、その最初の一歩になるために生まれました。": "NOVA was created to be that first step.",
+  "宇宙を学ぶことは、未来を学ぶこと。": "Learning space means learning the future.",
+  "NOVAは、知識を増やすためだけのアプリではありません。宇宙への好奇心を育み、学び続ける楽しさを届けることを目指しています。": "NOVA is not only about gaining knowledge. It is designed to nurture curiosity about space and make continuous learning enjoyable.",
+  "私たちは、誰もが宇宙をもっと身近に感じられる未来をつくります。": "We are building a future where everyone can feel closer to the universe.",
+  "学びが進むほど、宇宙が広がる。": "The more you learn, the wider the universe becomes.",
+  "クイズ、カテゴリ、XP、マップ、ミッション、図鑑。毎日の小さな進歩を、ひとつの探索体験へ。": "Quizzes, categories, XP, maps, missions, and collections turn small daily progress into one exploration experience.",
+  "ホームから、銀河の奥へ。": "From home to the depths of the galaxy.",
+  "学ぶ、進む、集める、振り返る。NOVAの体験は、ひとつの宇宙探索としてつながっています。": "Learn, progress, collect, and reflect. The NOVA experience connects everything as a single space exploration journey.",
+  "NOVAの世界を、画面から。": "Step into NOVA through the screen.",
+  "はじめた瞬間、広がる。": "A world opens the moment you begin.",
+  "NOVAの世界観と学習の流れを、シンプルに体験できます。": "Experience NOVA's world and learning flow in a simple way.",
+  "宇宙への入口。": "Your gateway to space.",
+  "NOVAを開いた瞬間から、宇宙を学ぶ体験が始まります。": "The moment you open NOVA, your space learning journey begins.",
+  "今日の宇宙へ、すぐに。": "Jump into today's universe.",
+  "進捗、ミッション、次のクイズを一画面で確認できます。": "Check your progress, missions, and next quiz on one screen.",
+  "一問ずつ、宇宙が近づく。": "One question brings space closer.",
+  "宇宙の知識を、短いクイズで少しずつ深められます。": "Deepen your space knowledge little by little through short quizzes.",
+  "知識が増えるほど、銀河が広がる。": "The more you know, the more your galaxy expands.",
+  "学習の進み具合に合わせて銀河が広がります。": "Your galaxy expands as your learning progresses.",
+  "学んだことを、図鑑で振り返る。": "Review what you have learned in your collection.",
+  "学んだ内容を図鑑として振り返れます。": "Review what you have learned as a collection.",
+  "成長が、見える。": "See your growth.",
+  "正答率、学習数、XP、進捗をまとめて確認できます。": "Check your accuracy, learning count, XP, and progress in one place.",
+  "今日の目的を、ひとつずつ。": "Complete today's goals one by one.",
+  "毎日のミッションが、学習のきっかけをつくります。": "Daily missions give you a reason to keep learning.",
+  "集中を、静かに積み重ねる。": "Build focus quietly over time.",
+  "短い集中時間を設定して、学習に入りやすくします。": "Set short focus sessions to make it easier to start learning.",
+  "探索の証を、美しく残す。": "Keep a beautiful record of your exploration.",
+  "レベル、XP、達成状況をひとつにまとめて確認できます。": "View your level, XP, and achievements together.",
+  "宇宙を、テーマごとに旅する。": "Travel through space by theme.",
+  "基礎から未来の応用まで。知りたい分野を選び、少しずつ理解を深めていけます。": "From the basics to future applications, choose the fields you want to explore and deepen your understanding step by step.",
+  "🪐 基礎宇宙": "🪐 Space Basics",
+  "宇宙を学ぶ最初の一歩。": "The first step in learning about space.",
+  "太陽系": "Solar System",
+  "惑星": "Planets",
+  "月探査": "Lunar Exploration",
+  "火星": "Mars",
+  "小惑星": "Asteroids",
+  "天文学": "Astronomy",
+  "🌌 恒星・銀河・宇宙論": "🌌 Stars, Galaxies, and Cosmology",
+  "宇宙の広がりと構造を知る。": "Understand the scale and structure of the universe.",
+  "恒星": "Stars",
+  "星雲": "Nebulae",
+  "銀河": "Galaxies",
+  "ブラックホール": "Black Holes",
+  "宇宙論": "Cosmology",
+  "系外惑星": "Exoplanets",
+  "宇宙物理": "Astrophysics",
+  "🚀 宇宙開発・探査": "🚀 Space Development and Exploration",
+  "宇宙へ行くための技術を学ぶ。": "Learn the technologies that make spaceflight possible.",
+  "ロケット工学": "Rocket Engineering",
+  "再使用ロケット": "Reusable Rockets",
+  "宇宙技術": "Space Technology",
+  "探査機": "Space Probes",
+  "人工衛星": "Satellites",
+  "衛星測位": "Satellite Navigation",
+  "宇宙望遠鏡": "Space Telescopes",
+  "🛰 組織・ミッション": "🛰 Organizations and Missions",
+  "世界の宇宙開発と有人宇宙活動。": "Global space development and human spaceflight.",
+  "宇宙開発史": "Spaceflight History",
+  "宇宙飛行士": "Astronauts",
+  "月面基地": "Moon Bases",
+  "🔬 未来・応用": "🔬 Future and Applications",
+  "宇宙が広げる未来の可能性。": "The future possibilities opened by space.",
+  "宇宙AI": "Space AI",
+  "宇宙ビジネス": "Space Business",
+  "宇宙医学": "Space Medicine",
+  "宇宙生命": "Astrobiology",
+  "宇宙天気": "Space Weather",
+  "知識が、星のようにつながる。": "Knowledge connects like stars.",
+  "答える。進む。深める。振り返る。": "Answer. Progress. Deepen. Reflect.",
+  "宇宙の知識を、短いクイズで少しずつ深められます。太陽系、惑星、探査、宇宙開発など、幅広いテーマをゲーム感覚で学べます。": "Deepen your space knowledge little by little through short quizzes. Learn a wide range of themes, from the solar system and planets to exploration and space development, with a game-like feel.",
+  "学習の進み具合に合わせて銀河が広がり、新しい惑星やエリアが解放されます。知識が増えるほど、自分だけの宇宙が広がっていきます。": "Your galaxy expands as your learning progresses, unlocking new planets and areas. The more you know, the more your own universe grows.",
+  "学びの現在地を、美しく見渡す。": "See where your learning stands, beautifully.",
+  "学んだ内容を図鑑として振り返れます。惑星、衛星、探査機、宇宙現象などを整理し、知識をあとから確認できます。": "Review what you have learned as a collection. Organize planets, moons, spacecraft, and space phenomena so you can revisit your knowledge anytime.",
+  "知識を深める、静かなライブラリ。": "A quiet library for deepening knowledge.",
+  "正答率、学習数、XP、進捗をまとめて確認できます。自分の成長が見えることで、学びを続けやすくなります。": "Check your accuracy, learning count, XP, and progress in one place. Seeing your growth makes it easier to keep learning.",
+  "成長を、数字ではなく実感へ。": "Turn growth from numbers into a feeling.",
+  "よくある質問": "FAQ",
+  "宇宙初心者でも使えますか？": "Can beginners use NOVA?",
+  "はい。基礎カテゴリと短いクイズから始められます。": "Yes. You can start with basic categories and short quizzes.",
+  "どんな分野を学べますか？": "What fields can I learn?",
+  "太陽系、銀河、探査、宇宙開発、未来技術まで学べます。": "You can learn about the solar system, galaxies, exploration, space development, and future technologies.",
+  "料金はかかりますか？": "Will NOVA cost money?",
+  "料金は公開時にApp Storeでお知らせします。": "Pricing will be announced on the App Store when NOVA is released.",
+  "いつ公開されますか？": "When will NOVA be released?",
+  "現在準備中です。公開日は決まり次第お知らせします。": "NOVA is currently in preparation. The release date will be announced once it is decided.",
+  "公開後も、NOVAの宇宙は広がり続けます。": "Even after launch, NOVA's universe will continue to expand.",
+  "宇宙への旅を、NOVAから。": "Begin your space journey.",
+  "閉じる": "Close"
+};
+const translatableAttributes = ["aria-label", "data-subtitle", "data-description"];
 
 function prefersReducedMotion() {
   return reducedMotionQuery.matches;
@@ -20,6 +135,123 @@ function prefersReducedMotion() {
 function smoothRange(value, start, end) {
   const progress = Math.min(Math.max((value - start) / Math.max(end - start, 0.001), 0), 1);
   return progress * progress * (3 - 2 * progress);
+}
+
+function getStoredLanguage() {
+  try {
+    return window.localStorage.getItem(languageStorageKey) === "en" ? "en" : "ja";
+  } catch {
+    return "ja";
+  }
+}
+
+function storeLanguage(language) {
+  try {
+    window.localStorage.setItem(languageStorageKey, language);
+  } catch {
+    // Ignore storage failures; the in-page language switch still works.
+  }
+}
+
+function collectLocalizedText() {
+  const walker = document.createTreeWalker(
+    document.body,
+    NodeFilter.SHOW_TEXT,
+    {
+      acceptNode(node) {
+        const parent = node.parentElement;
+        if (!parent || parent.closest("script, style")) return NodeFilter.FILTER_REJECT;
+
+        const key = node.nodeValue.trim();
+        return textTranslations[key] ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    }
+  );
+
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    const value = node.nodeValue;
+    const key = value.trim();
+    localizedTextNodes.push({
+      node,
+      ja: key,
+      en: textTranslations[key],
+      prefix: value.match(/^\s*/)[0],
+      suffix: value.match(/\s*$/)[0]
+    });
+  }
+}
+
+function collectLocalizedAttributes() {
+  document.querySelectorAll("*").forEach((element) => {
+    translatableAttributes.forEach((attribute) => {
+      const value = element.getAttribute(attribute);
+      if (value && textTranslations[value]) {
+        localizedAttributes.push({
+          element,
+          attribute,
+          ja: value,
+          en: textTranslations[value]
+        });
+      }
+    });
+  });
+}
+
+function updateLanguageButtons(language) {
+  document.querySelectorAll("[data-language-option]").forEach((button) => {
+    const isActive = button.dataset.languageOption === language;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
+}
+
+function updateLightboxTriggerLabels() {
+  const isEnglish = document.documentElement.lang.startsWith("en");
+
+  document.querySelectorAll("[data-lightbox]").forEach((trigger) => {
+    const title = trigger.dataset.title || "NOVA screenshot";
+    trigger.setAttribute("aria-label", isEnglish ? `Open ${title} screenshot` : `${title}のスクリーンショットを拡大表示`);
+  });
+}
+
+function setLanguage(language, shouldStore = true) {
+  const activeLanguage = language === "en" ? "en" : "ja";
+  const copy = pageCopy[activeLanguage];
+  document.documentElement.lang = activeLanguage;
+  document.title = copy.title;
+
+  const descriptionMeta = document.querySelector("meta[name='description']");
+  if (descriptionMeta) {
+    descriptionMeta.setAttribute("content", copy.description);
+  }
+
+  localizedTextNodes.forEach(({ node, ja, en, prefix, suffix }) => {
+    node.nodeValue = `${prefix}${activeLanguage === "en" ? en : ja}${suffix}`;
+  });
+
+  localizedAttributes.forEach(({ element, attribute, ja, en }) => {
+    element.setAttribute(attribute, activeLanguage === "en" ? en : ja);
+  });
+
+  updateLanguageButtons(activeLanguage);
+  updateLightboxTriggerLabels();
+
+  if (shouldStore) {
+    storeLanguage(activeLanguage);
+  }
+}
+
+function initializeLanguageToggle() {
+  collectLocalizedText();
+  collectLocalizedAttributes();
+  setLanguage(getStoredLanguage(), false);
+
+  document.querySelectorAll("[data-language-option]").forEach((button) => {
+    button.addEventListener("click", () => {
+      setLanguage(button.dataset.languageOption);
+    });
+  });
 }
 
 function resizeCanvas() {
@@ -231,7 +463,7 @@ const heroVisual = document.querySelector(".hero-visual");
 const heroPhone = document.querySelector(".hero-phone");
 
 function setupGalaxyMotionTargets() {
-  document.querySelectorAll("[data-image='images/optimized/GalaxyView-660.jpg']").forEach((target) => {
+  document.querySelectorAll("[data-image$='GalaxyView-660.jpg']").forEach((target) => {
     target.classList.add("galaxy-motion");
   });
 }
@@ -240,12 +472,8 @@ function setupLightboxTriggers() {
   document.querySelectorAll("[data-lightbox]").forEach((trigger) => {
     trigger.setAttribute("tabindex", "0");
     trigger.setAttribute("role", "button");
-
-    if (!trigger.hasAttribute("aria-label")) {
-      const title = trigger.dataset.title || "NOVA screenshot";
-      trigger.setAttribute("aria-label", `${title}のスクリーンショットを拡大表示`);
-    }
   });
+  updateLightboxTriggerLabels();
 }
 
 function openLightbox(trigger) {
@@ -573,6 +801,7 @@ document.addEventListener("keydown", (event) => {
 });
 
 if (header) header.classList.add("is-visible");
+initializeLanguageToggle();
 updateHeader();
 updateActiveNav();
 updateParallax();
